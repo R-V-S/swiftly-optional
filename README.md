@@ -2,6 +2,42 @@
 
 Optionals for JavaScript, inspired by Swift. 
 
+## Installation
+
+Install via `npm`:
+
+```js
+npm i swiftly-optional
+```
+
+Import the module in Node:
+
+```js
+const Optional = require('swiftly-optional')
+```
+
+Or in Babel:
+
+```js
+import Optional from 'swiftly-optional';
+```
+
+## Usage
+
+First, wrap an object in a new `Optional` construction:
+
+```
+const myOptional = new Optional(objData)
+```
+
+Now, when accessing an object, you can add an underscore to object properties that may or may not exist, and JS won't throw errors:
+
+```
+myOptional.a_.b_.c_.d
+```
+
+In the example above, if any of the properties `a`, `b`, or `c` do not exist, then `undefined` will be returned. 
+
 ## Why do I need this?
 
 Handling nested properties of an object in JavaScript is clumsy and verbose. Let's say we want to display a user's hometown as a string with a "city, country" format. A user object might look like this:
@@ -62,7 +98,7 @@ return `${location.city}, ${location.country}`
 There are many variations of those two basic approaches, and they do work. But they're not elegant. Swift's optionals provide a simple, clean way of accessing nested values without hitting errors. A Swift optional might look like this:
 
 ```swift
-let location = user?.profile?.location
+let location = user.profile?.location
 if (location) { return `${location.city}, ${location.country}` }
 ```
 
@@ -72,8 +108,38 @@ That happens to be remarkably similar to the intuitive approach that most develo
 
 Unfortunately, question marks aren't valid variable names, so we can't imitate Swift perfectly. But underscores are valid, and we can use them as a substitute. Here's the example above, with Swiftly Optionals:
 
-```swift
+```js
 let user = new Optional(userData)
-let location = user_.profile_.location
+let location = user.profile_.location
 if (location) { return `${location.city}, ${location.country}` }
+```
+
+Not too shabby. Here's a complete example:
+
+```js
+const Optional = require('swiftly-optional')
+
+const users = [
+  {
+    name: 'Joe',
+    profile: {
+      location: {
+        city: 'Boston',
+        country: 'USA'
+      } 
+    }
+  }, {
+    name: 'Joe',
+    profile: null
+  }, 
+  undefined
+]
+
+users.forEach( user => {
+  let location = Optional(user).profile_.location
+  if (location) {
+    console.log( `${location.city}, ${location.country}` )
+  }
+})
+
 ```
