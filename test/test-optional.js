@@ -4,8 +4,22 @@ const Optional = require('./../index')
 describe('Optionals', () => {
   beforeEach( () => {
     this.optional = new Optional({b: 5, c: {d: 'e'}})
+    this.user1 = new Optional({
+      name: 'Joe',
+      profile: {
+        location: {
+          city: 'Boston',
+          country: 'USA'
+        } 
+      }
+    })
+    
+    this.user2 = new Optional(undefined)
 
+    this.nullOptional = new Optional(null)
+    this.undefinedOptional = new Optional(undefined)
   })
+
   it(`should return the subject when directly referenced`, () => {
     chai.expect(this.optional).to.eql( { b: 5, c: { d: 'e' } } )
   })
@@ -27,13 +41,24 @@ describe('Optionals', () => {
   it(`should work when passed a nested object`, () => {
     chai.expect(this.optional.z_.y_.x_.w).to.be.undefined
     chai.expect(this.optional.c_.d_.z).to.be.undefined
+    chai.expect(this.user1.profile_.location_.city).to.eql('Boston')
   })
   it(`should fail when trying to access a child of a primitive property`, () => {
-    try {
-      chai.expect(this.optional.c_.d_.z_.y_.x).to.be.undefined
-    } catch(e) {
-      chai.expect(e.name).to.eql('TypeError')
-      chai.expect(e.message).to.eql(`Cannot read property 'y_' of undefined`)
-    }
+    chai.expect(() => this.optional.c_.d_.z_.y_.x).to.throw(TypeError)
+  })
+  it(`should return an object with isUndefined = true for an initial value of undefined`, () => {
+    chai.expect(this.undefinedOptional).to.eql({ isUndefined: true })
+  })
+  it(`should return an object with isNull = true for an initial value of null`, () => {
+    chai.expect(this.nullOptional).to.eql({ isNull: true })
+  })
+  it(`should return undefined for sub-properties of an initial value of undefined or null`, () => {
+    chai.expect(this.undefinedOptional.a_.b_.c_.d).to.be.undefined
+    chai.expect(this.user2.profile_.location_.city).to.be.undefined
+    chai.expect(this.nullOptional.a_.b_.c_.d).to.be.undefined
+    chai.expect(this.user2.profile_.location).to.be.undefined
+  })
+  it(`should error when trying to access a child of a non-optional`, () => {
+    chai.expect(() => this.undefinedOptional.a.b).to.throw(TypeError)
   })
 })
