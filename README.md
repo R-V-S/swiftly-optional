@@ -99,14 +99,14 @@ There are many variations of those two basic approaches, and they do work. But t
 
 ```swift
 let location = user.profile?.location
-if (location) { return `${location.city}, ${location.country}` }
+if (location != nil) { return location!.city + ", " + location!.country }
 ```
 
 That happens to be remarkably similar to the intuitive approach that most developers _want_ to take in JS, but can't. 
 
 **Enter Optionals.**
 
-Unfortunately, question marks aren't valid variable names, so we can't imitate Swift perfectly. But underscores are valid, and we can use them as a substitute. Here's the example above, with Swiftly Optionals:
+Unfortunately, question marks aren't valid variable names, so we can't imitate Swift perfectly. But underscores are valid, and we can use them as a substitute. Here's the example above, with Swiftly Optionals, for JavaScript™️:
 
 ```js
 let user = new Optional(userData)
