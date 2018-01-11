@@ -1,6 +1,6 @@
 {
   "name": "swiftly-optional",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Optionals for JavaScript, inspired by Swift",
   "main": "index.js",
   "module": "index.js",
