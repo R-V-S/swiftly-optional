@@ -15,8 +15,7 @@ const Optional = function(subject) {
         return createBlackhole('Undefined')
       } else if (property === null) {
         return createBlackhole('Null')
-      }
-      else if (typeof property === 'object') {
+      } else if (typeof property === 'object') {
         return new Optional(property)
       } else {
         return property
